@@ -1,0 +1,47 @@
+<h1 class="text-center">Liste des produits</h1>
+
+<p-dataView #dv [value]="products()" [rows]="5" [paginator]="true" filterBy="name">
+    <ng-template pTemplate="list" let-products>
+        <span class="p-input-icon-left mb-4">
+            <i class="pi pi-search"></i>
+            <input pInputText type="search" placeholder="Search by Name" (input)="applyFilterGlobal($event)">
+        </span>
+        <div class="grid">
+            @for (product of products; track product) {
+            <p-card class="flex-wrap col-6 sm:col-4 md:col-2">
+                <ng-template pTemplate="header">
+                    <img [src]="'/assets/images/' + product.image" [alt]="product.name" />
+                </ng-template>
+
+                <div class="text-lg font-medium text-900 mt-2">{{ product.name }}</div>
+
+                <div class="flex align-items-center justify-content-between mt-2">
+                    <span class="font-medium text-secondary text-sm">{{ product.category }}</span>
+                    <p-tag
+                        [value]="product.quantity === 0 ? InventoryStatus.OUTOFSTOCK : product.quantity < 3 ? InventoryStatus.LOWSTOCK : InventoryStatus.INSTOCK"
+                        [severity]="product.quantity === 0 ? 'danger' : product.quantity < 3 ? 'warning' : 'success' " />
+                </div>
+
+                <ng-template pTemplate="footer">
+                    <div class="flex align-items-center justify-content-between mt-2">
+                        <div class="text-xl font-medium text-800">{{ product.price }}€</div>
+
+                        <ng-container *ngIf="getProductQuantityInCart(product.id) === 0; else quantityBlock">
+                            <p-button icon="pi pi-shopping-cart" (onClick)="addToCart(product)"
+                                [disabled]="product.quantity === 0" />
+                        </ng-container>
+
+                        <ng-template #quantityBlock>
+                            <p-inputNumber [ngModel]="getProductQuantityInCart(product.id)" [min]="0"
+                                [max]="getProductQuantityInCart(product.id) + product.quantity"
+                                (ngModelChange)="onQuantityChange(product, $event)" [showButtons]="true"
+                                buttonLayout="horizontal" incrementButtonIcon="pi pi-plus"
+                                decrementButtonIcon="pi pi-minus" />
+                        </ng-template>
+                    </div>
+                </ng-template>
+            </p-card>
+            }
+        </div>
+    </ng-template>
+</p-dataView>

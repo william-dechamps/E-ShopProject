@@ -1,0 +1,15 @@
+:host {
+    display: block;
+    height: 100%;
+    overflow: auto;
+}
+
+::ng-deep .p-paginator {
+    display: flex;
+    justify-content: center;
+}
+
+::ng-deep .p-inputnumber .p-inputtext {
+    width: 60px;
+    text-align: center;
+}

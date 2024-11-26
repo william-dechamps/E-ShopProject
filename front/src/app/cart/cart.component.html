@@ -1,0 +1,35 @@
+<h1 class="text-center">Panier</h1>
+<p-dataView #dv [value]="(productsInCart | async) || []">
+    <ng-template pTemplate="list" let-productsInCart>
+        <div class="grid">
+            @for (cartItem of productsInCart; track cartItem) {
+            <p-card class="col-12">
+                <div class="flex flex-column sm:flex-row p-4 gap-3">
+                    <div class="md:w-8rem relative">
+                        <img class="mx-auto w-full" [src]="'/assets/images/' + cartItem.product.image"
+                            [alt]="cartItem.product.name" />
+                    </div>
+                    <div
+                        class="flex flex-column md:flex-row justify-content-between md:align-items-center flex-1 gap-4">
+                        <div class="text-lg font-medium text-900">{{ cartItem.product.name }}</div>
+                    </div>
+
+                    <div class="flex flex-column md:flex-row justify-content-center md:align-items-center flex-1 gap-4">
+                        <label [for]="cartItem.product.code">Quantité : </label>
+                        <p-inputNumber incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+                            buttonLayout="horizontal" [inputId]="cartItem.product.code"
+                            (ngModelChange)="onQuantityChange(cartItem,$event)" [(ngModel)]="cartItem.quantity"
+                            [showButtons]="true" [min]="0" [max]="cartItem.product.quantity + cartItem.quantity" />
+                    </div>
+
+                    <div class="flex flex-column md:align-items-end gap-8">
+                        <span class="text-xl font-semibold text-900">{{ (cartItem.product.price *
+                            cartItem.quantity).toFixed(2) }}€</span>
+                        <p-button icon="pi pi-trash" (onClick)="removeFromCart(cartItem)" class="" severity="danger" />
+                    </div>
+                </div>
+            </p-card>
+            }
+        </div>
+    </ng-template>
+</p-dataView>

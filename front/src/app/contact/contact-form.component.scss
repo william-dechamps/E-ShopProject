@@ -1,0 +1,21 @@
+:host {
+    display: block;
+    height: 100%;
+    overflow: auto;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0;
+}
+
+::ng-deep .p-button {
+    width: 100%;
+}
+
+:host ::ng-deep .p-toast {
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
